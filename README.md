@@ -19,18 +19,13 @@
 1. Clonar el repositorio  
 2. Navegar a la carpeta del backend  
 3. Ejecutar:  
-   ```bash
-   ./mvnw spring-boot:run
+./mvnw spring-boot:run
 El backend correrá en http://localhost:8080
 
-Frontend
-Navegar a la carpeta frontend
+### Frontend
 
-Servir los archivos con un servidor HTTP (por ejemplo, con http-server):
 
-bash
-Copiar
-Editar
+Servir el html con un servidor HTTP (por ejemplo, con http-server):
 npx http-server -p 3000
 Abrir en navegador http://localhost:3000
 
@@ -40,4 +35,4 @@ GET /api/pokemon/{id} - Buscar Pokémon por ID
 GET /api/pokemon/name/{name} - Buscar Pokémon por nombre
 
 🧑‍💻 Autor
-Rafa — Tu GitHub
+Rafa Moreno
