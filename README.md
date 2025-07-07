@@ -36,5 +36,6 @@ GET /api/pokemon/name/{name} - Buscar Pokémon por nombre
 
 🧑‍💻 Autor
 Rafa Moreno
+
 ![image](https://github.com/user-attachments/assets/aa1c4ba8-75fa-491e-915b-8bfd3440ca55)
 
