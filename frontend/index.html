@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pokedex - Buscar Pokémon</title>
+    <style>
+        :root {
+            --primary-color: #ffcb05;
+            --background-light: #f5f5f5;
+            --background-dark: #2c2c2c;
+            --text-light: #222;
+            --text-dark: #eee;
+            --card-bg-light: #fff;
+            --card-bg-dark: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem 2rem;
+            background-color: var(--primary-color);
+            align-items: center;
+        }
+
+        #toggleDarkMode {
+            cursor: pointer;
+            background: none;
+            border: 2px solid #222;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #222;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode #toggleDarkMode {
+            color: #eee;
+            border-color: #eee;
+        }
+
+        main {
+            max-width: 450px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        form {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 0.6rem 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            font-size: 1.1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3b4cca;
+            box-shadow: 0 0 8px #3b4ccaaa;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #222;
+        }
+
+        button:hover {
+            background-color: #3b4cca;
+            color: white;
+        }
+
+        body.dark-mode button {
+            color: #222;
+        }
+
+        body.dark-mode button:hover {
+            background-color: #fdd835;
+            color: #222;
+        }
+
+        .pokemon-card {
+            background-color: var(--card-bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode .pokemon-card {
+            background-color: var(--card-bg-dark);
+            color: var(--text-dark);
+            box-shadow: 0 4px 12px rgb(255 255 255 / 0.1);
+        }
+
+        .pokemon-card img {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .pokemon-card h2 {
+            margin: 0.5rem 0;
+            text-transform: capitalize;
+            font-size: 2rem;
+            letter-spacing: 1.5px;
+        }
+
+        .types {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .type {
+            background-color: #a4a4a4;
+            color: white;
+            padding: 0.3rem 0.9rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Type color examples */
+        .type.fire { background-color: #f08030; }
+        .type.water { background-color: #6890f0; }
+        .type.grass { background-color: #78c850; }
+        .type.electric { background-color: #f8d030; color: #333; }
+        .type.ice { background-color: #98d8d8; color: #333; }
+        .type.fighting { background-color: #c03028; }
+        .type.poison { background-color: #a040a0; }
+        .type.ground { background-color: #e0c068; color: #333; }
+        .type.flying { background-color: #a890f0; }
+        .type.psychic { background-color: #f85888; }
+        .type.bug { background-color: #a8b820; }
+        .type.rock { background-color: #b8a038; }
+        .type.ghost { background-color: #705898; }
+        .type.dark { background-color: #705848; }
+        .type.dragon { background-color: #7038f8; }
+        .type.steel { background-color: #b8b8d0; color: #333; }
+        .type.fairy { background-color: #ee99ac; color: #333; }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .error {
+            text-align: center;
+            color: #cc0000;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button id="toggleDarkMode" aria-label="Alternar modo oscuro">Modo oscuro</button>
+    </header>
+
+    <main>
+        <h1>Buscar Pokémon por ID o Nombre</h1>
+        <form id="searchForm">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Ejemplo: 25 o pikachu"
+                autocomplete="off"
+                required
+                aria-label="Buscar Pokémon por ID o nombre"
+            />
+            <button type="submit">Buscar</button>
+        </form>
+
+        <div id="result"></div>
+    </main>
+
+    <script>
+        const form = document.getElementById('searchForm');
+        const input = document.getElementById('searchInput');
+        const resultDiv = document.getElementById('result');
+        const toggleBtn = document.getElementById('toggleDarkMode');
+
+        // Toggle dark mode
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleBtn.textContent = document.body.classList.contains('dark-mode') ? 'Modo claro' : 'Modo oscuro';
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const query = input.value.trim().toLowerCase();
+
+            if (!query) return;
+
+            resultDiv.innerHTML = '<p>Cargando...</p>';
+
+            // Detect if query is a number (ID) or string (name)
+            const isId = /^\d+$/.test(query);
+
+            // Prepare API URL
+            let url = `http://localhost:8080/api/pokemon/${isId ? query : 'name/' + query}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Pokémon no encontrado');
+                }
+                const pokemon = await response.json();
+                showPokemon(pokemon);
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">${error.message}</p>`;
+            }
+        });
+
+        function showPokemon(pokemon) {
+            const typesHtml = pokemon.types
+                .map(type => `<span class="type ${type}">${type}</span>`)
+                .join('');
+
+            resultDiv.innerHTML = `
+                <div class="pokemon-card" role="region" aria-label="Información de Pokémon">
+                    <img src="${pokemon.image}" alt="Imagen de ${pokemon.name}" />
+                    <h2>${pokemon.name}</h2>
+                    <div class="types">${typesHtml}</div>
+                    <div class="stats">
+                        <div class="stat"><strong>Altura</strong> ${pokemon.height / 10} m</div>
+                        <div class="stat"><strong>Peso</strong> ${pokemon.weight / 10} kg</div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
